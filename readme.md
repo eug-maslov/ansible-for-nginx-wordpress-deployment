@@ -11,16 +11,25 @@ This repository contains all the necessary Ansible files like hosts.ini, playboo
 ###  Populate Ansible Vault (ansible/vault.yml)
 This file securely stores sensitive information like database passwords.
 
-Go to the ansible/ folder within this repository (your local copy). For example: cd ansible-for-nginx-wordpress-deployment/ansible/
-Create or edit the vault file: ansible-vault edit vault.yml
+Go to the ansible/ folder within this repository (your local copy). For example: 
+```
+cd ansible-for-nginx-wordpress-deployment/ansible/
+```
+
+Create or edit the vault file: 
+```
+ansible-vault edit vault.yml
+```
+
 Set a password for the vault and remember it!
 
 Add these secret variables inside the file, making sure names match exactly:
+```
 wp_db_name
 wp_db_user
 wp_db_password
 mysql_root_password
-
+```
 Save and close the editor.
  
 ## What Else to Configure
@@ -38,7 +47,10 @@ Your docker-compose.yml file: This file, located in your WordPress application r
 
 ## How to Run
 Go to the root of this Ansible repository on your local machine.
-Run the Ansible playbook: ansible-playbook -i ansible/hosts.ini ansible/playbook.yml --ask-vault-pass
+Run the Ansible playbook: 
+```
+ansible-playbook -i ansible/hosts.ini ansible/playbook.yml --ask-vault-pass
+```
 Enter your Vault password when prompted.
 
 ## After Deployment
