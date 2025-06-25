@@ -1,0 +1,17 @@
+---
+- name: Deploy WordPress with Docker Compose and Ansible
+  hosts: webservers
+  become: yes 
+  vars:
+    wp_repo_url: https://github.com/eug-maslov/nginx-wordpress-deployment.git 
+    remote_app_dir: /opt/my_wordpress_app
+
+  vars_files: 
+    - vault.yml 
+  roles:
+    - role: geerlingguy.docker
+      vars:
+        docker_install_from_script: true
+    - role: wordpress_deploy
+    
+    

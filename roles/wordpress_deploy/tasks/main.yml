@@ -1,0 +1,51 @@
+---
+- name: Ensure remote application directory exists
+  ansible.builtin.file:
+    path: "{{ remote_app_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Clone WordPress project from GitHub
+  ansible.builtin.git:
+    repo: "{{ wp_repo_url }}" 
+    dest: "{{ remote_app_dir }}"
+    version: main 
+    accept_hostkey: yes
+
+- name: Generate .env file from template on the remote host
+  ansible.builtin.template:
+    src: .env.j2 
+    dest: "{{ remote_app_dir }}/.env"
+    mode: '0600' 
+
+- name: Ensure mysql-data and wordpress-html directories exist for volumes
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ remote_app_dir }}/mysql-data"
+    - "{{ remote_app_dir }}/wordpress-html"
+    - "{{ remote_app_dir }}/nginx-logs" 
+
+
+- name: Run Docker Compose services
+  community.docker.docker_compose_v2:
+    project_src: "{{ remote_app_dir }}"
+    state: present 
+    pull: always     
+  register: compose_up_result
+
+- name: Display Docker Compose up result
+  ansible.builtin.debug:
+    var: compose_up_result
+
+- name: Verify WordPress is accessible via HTTP
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:80"
+    status_code: 200
+    timeout: 60 
+  register: http_check_result
+  until: http_check_result.status == 200 
+  retries: 10 
+  delay: 6 
