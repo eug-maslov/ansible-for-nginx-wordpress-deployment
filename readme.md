@@ -1,13 +1,14 @@
-Ansible for WordPress Docker Compose Deployment
+# Ansible for WordPress Docker Compose Deployment
+
 This repository contains Ansible code to deploy a WordPress site with Nginx using Docker Compose. This simple setup doesn't cover SSL certification. By default, this playbook will clone your specified WordPress application's GitHub repository onto a target server.
 
-What You Need
+### What You Need
 You'll need Ansible installed on your computer, along with the community.docker and geerlingguy.docker Ansible collections.
 
-How to Set Up and Deploy
+## How to Set Up and Deploy
 This repository contains all the necessary Ansible files like hosts.ini, playbook.yml, vault.yml, and the roles/ folder.
 
-1. Populate Ansible Vault (ansible/vault.yml)
+###  Populate Ansible Vault (ansible/vault.yml)
 This file securely stores sensitive information like database passwords.
 
 Go to the ansible/ folder within this repository (your local copy). For example: cd ansible-for-nginx-wordpress-deployment/ansible/
@@ -21,8 +22,8 @@ wp_db_password
 mysql_root_password
 
 Save and close the editor.
-
-2. What Else to Configure
+ 
+## What Else to Configure
 ansible/hosts.ini: Tell Ansible where your server is. For a remote server, specify its IP address, SSH username, and the path to your SSH private key. 
 ansible/playbook.yml: This is your main deployment script.
 
@@ -35,10 +36,10 @@ ansible/roles/wordpress_deploy/templates/.env.j2: This template creates the .env
 
 Your docker-compose.yml file: This file, located in your WordPress application repository, defines your Docker services. Verify it uses environment variables (e.g., ${WORDPRESS_LOCAL_HOME}) from your .env file.
 
-How to Run
+## How to Run
 Go to the root of this Ansible repository on your local machine.
 Run the Ansible playbook: ansible-playbook -i ansible/hosts.ini ansible/playbook.yml --ask-vault-pass
 Enter your Vault password when prompted.
 
-After Deployment
+## After Deployment
 Open your web browser and go to http://your_server_ip:8080 (adjust the port if needed) to follow the WordPress setup wizard.
