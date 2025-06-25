@@ -5,6 +5,7 @@
   vars:
     wp_repo_url: https://github.com/eug-maslov/nginx-wordpress-deployment.git 
     remote_app_dir: /opt/my_wordpress_app
+    wp_external_port: 8080
 
   vars_files: 
     - vault.yml 

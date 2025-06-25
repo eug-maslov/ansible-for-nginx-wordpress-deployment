@@ -40,12 +40,23 @@
   ansible.builtin.debug:
     var: compose_up_result
 
+- name: Check if Docker Compose containers are running
+  community.docker.docker_container_info:
+    name: "{{ item }}" 
+  register: container_status
+  failed_when: "container_status.container.State.Status != 'running'" 
+  loop:
+    - wp-wordpress 
+    - wp-database   
+    - nginx   
+
 - name: Verify WordPress is accessible via HTTP
   ansible.builtin.uri:
-    url: "http://{{ ansible_host }}:80"
+    url: "http://{{ ansible_host }}:{{ wp_external_port }}"
     status_code: 200
     timeout: 60 
   register: http_check_result
   until: http_check_result.status == 200 
   retries: 10 
   delay: 6 
+
